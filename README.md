@@ -9,3 +9,8 @@ A simple powershell script to validate that required outbound network connectivi
 | AKS HCI | [Outbound connectivity requirements](https://learn.microsoft.com/en-us/azure-stack/aks-hci/system-requirements?tabs=allow-table#network-requirements ) |
 | Arc for Kubernetes | [Outbound connectivity requirements](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-cluster?tabs=azure-cli#meet-network-requirements) |
 | Arc Resource Bridge | [Outbound connectivity requirements](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-cluster?tabs=azure-cli#meet-network-requirements) |
+
+## Getting Started
+```powershell
+PS> .\Stack-HCI-Network-Requirements-Checker.ps1
+```
