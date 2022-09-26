@@ -137,7 +137,7 @@ function Check-Azure-Resource-Bridge-Dependencies {
         Test-NetConnection westeurope.dp.prod.appliances.azure.com -Port 443 -WarningAction Stop
         Test-NetConnection ecpacr.azurecr.io -Port 443 -WarningAction Stop
         Test-NetConnection contoso.blob.core.windows.net -Port 443 -WarningAction Stop
-        Test-NetConnection tlu.dl.delivery.mp.microsoft.com -Port 443 -WarningAction Stop
+        Test-NetConnection msedge.f.dl.delivery.mp.microsoft.com -Port 443 -WarningAction Stop
         Test-NetConnection geo-prod.do.dsp.mp.microsoft.com -Port 443 -WarningAction Stop
         Test-NetConnection azurearcfork8sdev.azurecr.io -Port 443 -WarningAction Stop
         Test-NetConnection adhs.events.data.microsoft.com -Port 443 -WarningAction Stop
