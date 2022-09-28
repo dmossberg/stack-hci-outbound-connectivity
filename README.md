@@ -1,5 +1,5 @@
 # Stack HCI network requirements validator 
-A simple powershell script to validate that required outbound network connectivity is allowed for Stack HCI installations.
+A simple powershell script to validate that required outbound network connectivity are met for Stack HCI installations.
 
 ## Verified network requirements
 
