@@ -122,7 +122,7 @@ function Check-Arc-For-K8s-Dependencies {
 
     .NOTES
         Review most up-to-date network requirements in the official docs: 
-        https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-cluster?tabs=azure-cli#meet-network-requirements 
+        https://learn.microsoft.com/en-us/azure-stack/hci/manage/azure-arc-enabled-virtual-machines#firewall-url-exceptions
 #>
 function Check-Azure-Resource-Bridge-Dependencies {
     Write-Host ">> Running Arc Resource Bridge checks" -ForegroundColor Green
