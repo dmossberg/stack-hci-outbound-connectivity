@@ -1,4 +1,4 @@
-﻿<#
+<#
     .SYNOPSIS
         Perform connectivity tests to validate Azure Stack HCI network requirements
 
@@ -6,35 +6,30 @@
         Review most up-to-date network requirements in the official docs: 
         https://learn.microsoft.com/en-us/azure-stack/hci/concepts/firewall-requirements#recommended-firewall-urls
 #>
-function Check-Stack-HCI-Dependencies {
-    Write-Host ">> Running Stack HCI cluster checks" -ForegroundColor Green
+function Test-Stack-HCI-Dependencies {
+    Write-Host "Running Stack HCI cluster checks" -BackgroundColor DarkCyan
 
-    try
-    {
-        Test-NetConnection login.microsoftonline.com -Port 443 -WarningAction Stop 
-        Test-NetConnection graph.windows.net -Port 443 -WarningAction Stop
-        Test-NetConnection dp.stackhci.azure.com -Port 443 -WarningAction Stop 
+    $checks = @( 
+        "login.microsoftonline.com:443"
+        "graph.windows.net:443"
+        "dp.stackhci.azure.com:443"
+        "management.azure.com:443"
+        "windowsupdate.microsoft.com:80"
+        "windowsupdate.microsoft.com:443"
+        "update.microsoft.com:80"
+        "update.microsoft.com:443"
+        "download.windowsupdate.com:80"
+        "go.microsoft.com:80"
+        "dl.delivery.mp.microsoft.com:80"
+        "download.microsoft.com:443"
+        "www.powershellgallery.com:443"
 
-        Test-NetConnection windowsupdate.microsoft.com -Port 80 -WarningAction Stop
-        Test-NetConnection update.microsoft.com -Port 80 -WarningAction Stop
-        Test-NetConnection download.windowsupdate.com -Port 80 -WarningAction Stop
-        # Test-NetConnection wustat.windows.com -Port 80 -WarningAction Stop               # <-- Endpoint not reachable
-        # Test-NetConnection ntservicepack.microsoft.com -Port 80 -WarningAction Stop      # <-- Endpoint not reachable
-        Test-NetConnection go.microsoft.com -Port 80 -WarningAction Stop
-        Test-NetConnection dl.delivery.mp.microsoft.com -Port 80 -WarningAction Stop
+        # "wustat.windows.com:80"           # <-- Endpoint not reachable
+        # "ntservicepack.microsoft.com:80"  # <-- Endpoint not reachable
+    )
 
-        Test-NetConnection windowsupdate.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection update.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection download.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection www.powershellgallery.com -Port 443 -WarningAction Stop
-        $script:stackHciSucceeded = $true
-    }
-    catch
-    {
-        $script:stackHciSucceeded = $false
-        $script:stackHciError = $_
-
-    }
+    Invoke-Checks $checks
+    Write-Host
 }
 
 <#
@@ -45,32 +40,29 @@ function Check-Stack-HCI-Dependencies {
         Review most up-to-date network requirements in the official docs:
         https://learn.microsoft.com/en-us/azure-stack/aks-hci/system-requirements?tabs=allow-table#network-requirements 
 #>
-function Check-AKS-HCI-Dependencies {
-    Write-Host ">> Running AKS HCI checks" -ForegroundColor Green
+function Test-AKS-HCI-Dependencies {
+    Write-Host "Running AKS HCI checks" -BackgroundColor DarkCyan
 
-    try {
-        Test-NetConnection msk8s.api.cdp.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection msk8s.b.tlu.dl.delivery.mp.microsoft.com -Port 80 -WarningAction Stop
-        Test-NetConnection msk8s.f.tlu.dl.delivery.mp.microsoft.com -Port 80 -WarningAction Stop
-        Test-NetConnection login.microsoftonline.com -Port 443 -WarningAction Stop
-        Test-NetConnection login.windows.net -Port 443 -WarningAction Stop
-        Test-NetConnection management.azure.com -Port 443 -WarningAction Stop
-        Test-NetConnection www.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection msft.sts.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection graph.windows.net -Port 443 -WarningAction Stop
-        Test-NetConnection ecpacr.azurecr.io -Port 443 -WarningAction Stop
-        Test-NetConnection contoso.blob.core.windows.net -Port 443 -WarningAction Stop
-        Test-NetConnection mcr.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection akshci.azurefd.net -Port 443 -WarningAction Stop
-        Test-NetConnection v20.events.data.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection adhs.events.data.microsoft.com -Port 443 -WarningAction Stop
-        $script:aksHciSucceeded = $true
-    }
-    catch
-    {
-        $script:aksHciSucceeded = $false
-        $script:aksHciError = $_
-    }
+    $checks = @( 
+        "msk8s.api.cdp.microsoft.com:443"
+        "msk8s.b.tlu.dl.delivery.mp.microsoft.com:80"
+        "msk8s.f.tlu.dl.delivery.mp.microsoft.com:80"
+        "login.microsoftonline.com:443"
+        "login.windows.net:443"
+        "management.azure.com:443"
+        "www.microsoft.com:443"
+        "msft.sts.microsoft.com:443"
+        "graph.windows.net:443"
+        "ecpacr.azurecr.io:443"
+        "contoso.blob.core.windows.net:443"
+        "mcr.microsoft.com:443"
+        "akshci.azurefd.net:443"
+        "v20.events.data.microsoft.com:443"
+        "adhs.events.data.microsoft.com:443"
+    )
+
+    Invoke-Checks $checks
+    Write-Host
 }
 
 <#
@@ -81,39 +73,34 @@ function Check-AKS-HCI-Dependencies {
         Review most up-to-date network requirements in the official docs: 
         https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-cluster?tabs=azure-cli#meet-network-requirements 
 #>
-function Check-Arc-For-K8s-Dependencies {
-    Write-Host ">> Running Arc-For-K8s checks" -ForegroundColor Green
+function Test-Arc-For-K8s-Dependencies {
+    Write-Host "Running Arc-For-K8s checks" -BackgroundColor DarkCyan
 
-    try {
-        Test-NetConnection management.azure.com -Port 443 -WarningAction Stop
-        Test-NetConnection westeurope.dp.kubernetesconfiguration.azure.com -Port 443 -WarningAction Stop 
-        Test-NetConnection login.microsoftonline.com -Port 443 -WarningAction Stop
-        Test-NetConnection westeurope.login.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection mcr.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection mcrflowprodcentralus.data.mcr.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection gbl.his.arc.azure.com -Port 443 -WarningAction Stop
-        Test-NetConnection k8connecthelm.azureedge.net -Port 443 -WarningAction Stop
+    $checks = @( 
+        "management.azure.com:443"
+        "westeurope.dp.kubernetesconfiguration.azure.com:443"
+        "login.microsoftonline.com:443"
+        "westeurope.login.microsoft.com:443"
+        "mcr.microsoft.com:443"
+        "mcrflowprodcentralus.data.mcr.microsoft.com:443"
+        "gbl.his.arc.azure.com:443"
+        "k8connecthelm.azureedge.net:443"
+        "guestnotificationservice.azure.com:443"
+        "sts.windows.net:443"
+        "k8sconnectcsp.azureedge.net:443"
+        "azgnrelay-westeurope-l1.servicebus.windows.net:443"
+    )
 
-        Test-NetConnection guestnotificationservice.azure.com -Port 443 -WarningAction Stop
-        Test-NetConnection sts.windows.net -Port 443 -WarningAction Stop
-        Test-NetConnection k8sconnectcsp.azureedge.net -Port 443 -WarningAction Stop
+    <#
+        To translate the *.servicebus.windows.net wildcard into specific endpoints, use the command 
+        \GET https://guestnotificationservice.azure.com/urls/allowlist?api-version=2020-01-01&location=<location>. 
+        Within this command, the region must be specified for the <location> placeholder.
 
-        <#
-            To translate the *.servicebus.windows.net wildcard into specific endpoints, use the command 
-            \GET https://guestnotificationservice.azure.com/urls/allowlist?api-version=2020-01-01&location=<location>. 
-            Within this command, the region must be specified for the <location> placeholder.
+        This script tests an arbitrary public service bus endpoint:
+    #>
 
-            This script tests an arbitrary public service bus endpoint:
-        #>
-
-        Test-NetConnection azgnrelay-westeurope-l1.servicebus.windows.net -Port 443 -WarningAction Stop
-         $script:arcForK8sSucceeded = $true
-    }
-    catch
-    {
-        $script:arcForK8sSucceeded = $false
-        $script:arcForK8sError = $_
-    }
+    Invoke-Checks $checks
+    Write-Host
 }
 
 <#
@@ -124,33 +111,29 @@ function Check-Arc-For-K8s-Dependencies {
         Review most up-to-date network requirements in the official docs: 
         https://learn.microsoft.com/en-us/azure-stack/hci/manage/azure-arc-enabled-virtual-machines#firewall-url-exceptions
 #>
-function Check-Azure-Resource-Bridge-Dependencies {
-    Write-Host ">> Running Arc Resource Bridge checks" -ForegroundColor Green
+function Test-Arc-Resource-Bridge-Dependencies {
+    Write-Host "Running Arc Resource Bridge checks" -BackgroundColor DarkCyan
 
-    try
-    {
-        Test-NetConnection mcr.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection gbl.his.arc.azure.com -Port 443 -WarningAction Stop                               
-        Test-NetConnection westeurope.dp.kubernetesconfiguration.azure.com -Port 443 -WarningAction Stop
-        Test-NetConnection northwind.servicebus.windows.net -Port 443 -WarningAction Stop
-        Test-NetConnection guestnotificationservice.azure.com -Port 443 -WarningAction Stop
-        Test-NetConnection westeurope.dp.prod.appliances.azure.com -Port 443 -WarningAction Stop
-        Test-NetConnection ecpacr.azurecr.io -Port 443 -WarningAction Stop
-        Test-NetConnection contoso.blob.core.windows.net -Port 443 -WarningAction Stop
-        Test-NetConnection msedge.f.dl.delivery.mp.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection geo-prod.do.dsp.mp.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection azurearcfork8sdev.azurecr.io -Port 443 -WarningAction Stop
-        Test-NetConnection adhs.events.data.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection v20.events.data.microsoft.com -Port 443 -WarningAction Stop
-        Test-NetConnection gcr.io -Port 443 -WarningAction Stop
-        Test-NetConnection pypi.org -Port 443 -WarningAction Stop
-        $script:arcResBridgeSucceeded = $true
-    }
-    catch
-    {
-        $script:arcResBridgeSucceeded = $false
-        $script:arcResBridgeError = $_
-    }
+    $checks = @( 
+        "mcr.microsoft.com:443"
+        "gbl.his.arc.azure.com:443"
+        "westeurope.dp.kubernetesconfiguration.azure.com:443"
+        "azgnrelay-westeurope-l1.servicebus.windows.net:443"
+        "guestnotificationservice.azure.com:443"
+        "westeurope.dp.prod.appliances.azure.com:443"
+        "ecpacr.azurecr.io:443"
+        "contoso.blob.core.windows.net:443"
+        "msedge.f.dl.delivery.mp.microsoft.com:443"
+        "geo-prod.do.dsp.mp.microsoft.com:443"
+        "azurearcfork8sdev.azurecr.io:443"
+        "adhs.events.data.microsoft.com:443"
+        "v20.events.data.microsoft.com:443"
+        "gcr.io:443"
+        "pypi.org:443"
+    )
+
+    Invoke-Checks $checks
+    Write-Host
 }
 
 function Get-WarningMessage {
@@ -161,28 +144,42 @@ function Get-WarningMessage {
 
 }
 
-function Write-CheckResult {
-    param (
-        [string]$testName,
-        [bool]$testSucceded, 
-        $testNetConnectionError)
+function Invoke-Checks {
+    param ($checks)
 
-    if ($testSucceded -eq "$true") 
-    {
-        Write-Host "$testName network dependency checks [SUCCEEDED]" -BackgroundColor Green
-    }
-    else    {
-        $error = Get-WarningMessage $testNetConnectionError
-        Write-Host "$testName network dependencies checks [ FAILED]:$error" -BackgroundColor Red
+    foreach ($check in $checks) {
+        $success = $false
+
+        $parsed = $check.Split(":")
+        $hostname = $parsed[0]
+        $port = $parsed[1]
+        
+        try
+        {
+            $null = Test-NetConnection $hostname -Port $port -WarningAction Stop 3>$null
+            $success = $true
+        }
+        catch
+        {
+            $warning = Get-WarningMessage $_
+        }
+
+        Write-Host "Connection to $($hostname):$($port) " -NoNewline
+
+        if ($success -eq $true)
+        {
+            Write-Host "SUCCEEDED" -ForegroundColor Green
+        }
+        else
+        {
+            Write-Host "FAILED" -ForegroundColor Red
+            Write-Host "--> " -NoNewline
+            Write-Warning $warning
+        }
     }
 }
 
-Check-Stack-HCI-Dependencies
-Check-AKS-HCI-Dependencies
-Check-Arc-For-K8s-Dependencies
-Check-Azure-Resource-Bridge-Dependencies
-
-Write-CheckResult "Stack HCI cluster" $script:stackHciSucceeded $script:stackHciError
-Write-CheckResult "AKS HCI" $script:aksHciSucceeded $script:aksHciError
-Write-CheckResult "Arc for Kubernetes" $script:arcForK8sSucceeded $script:arcForK8sError
-Write-CheckResult "Arc Resource Bridge" $script:arcResBridgeSucceeded $script:arcResBridgeError
+Test-Stack-HCI-Dependencies
+Test-AKS-HCI-Dependencies
+Test-Arc-For-K8s-Dependencies
+Test-Arc-Resource-Bridge-Dependencies
