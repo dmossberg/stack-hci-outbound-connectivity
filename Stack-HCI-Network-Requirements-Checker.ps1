@@ -123,13 +123,14 @@ function Test-Arc-Resource-Bridge-Dependencies {
         "westeurope.dp.prod.appliances.azure.com:443"
         "ecpacr.azurecr.io:443"
         "contoso.blob.core.windows.net:443"
-        "msedge.f.dl.delivery.mp.microsoft.com:443"
+        "tlu.dl.delivery.mp.microsoft.com:443"
         "geo-prod.do.dsp.mp.microsoft.com:443"
         "azurearcfork8sdev.azurecr.io:443"
         "adhs.events.data.microsoft.com:443"
         "v20.events.data.microsoft.com:443"
-        "gcr.io:443"
         "pypi.org:443"
+
+        # "gcr.io:443"     # <-- Dependency removed from official docs
     )
 
     Invoke-Checks $checks
