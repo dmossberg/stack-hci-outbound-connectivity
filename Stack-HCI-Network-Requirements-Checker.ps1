@@ -137,8 +137,7 @@ function Test-Arc-Resource-Bridge-Dependencies {
         "adhs.events.data.microsoft.com:443"
         "v20.events.data.microsoft.com:443"
         "pypi.org:443"
-
-        # "gcr.io:443"     # <-- Dependency removed from official docs
+        "gcr.io:443" 
     )
 
     Invoke-Checks $checks
