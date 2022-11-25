@@ -19,8 +19,9 @@ function Test-Stack-HCI-Dependencies {
     $checks = @(
         "login.microsoftonline.com:443"
         "graph.windows.net:443"
-        "dp.stackhci.azure.com:443"
         "management.azure.com:443"
+        "dp.stackhci.azure.com:443"
+        "azurestackhci.azurefd.net:443"
         "windowsupdate.microsoft.com:80"
         "windowsupdate.microsoft.com:443"
         "update.microsoft.com:80"
@@ -144,14 +145,6 @@ function Test-Arc-Resource-Bridge-Dependencies {
     Write-Host ""
 }
 
-function Get-WarningMessage {
-    param ($testNetConnectionError)
-
-    $position = $testNetConnectionError.Exception.Message.IndexOf(":")
-    return $testNetConnectionError.Exception.Message.Substring($position+1)
-
-}
-
 function Invoke-Checks {
     param ($checks)
 
@@ -176,12 +169,10 @@ function Invoke-Checks {
                 $null = Invoke-WebRequest -Uri $uri -UseBasicParsing -SkipHttpErrorCheck -SkipCertificateCheck -Proxy $Proxy -WarningAction Stop 3>$null
             }
 
-            #$null = Invoke-WebRequest -Uri $uri -UseBasicParsing -SkipHttpErrorCheck -Proxy 'http://127.0.0.1:8888/' -WarningAction Stop 3>$null
             $success = $true
         }
         catch
         {
-            # $warning = Get-WarningMessage $_
             $warning = $_
         }
 
