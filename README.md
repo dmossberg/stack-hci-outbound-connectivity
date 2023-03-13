@@ -22,3 +22,5 @@ If forward proxy is required pass the proxy address and port as a parameter
 ```powershell
 PS> .\Stack-HCI-Network-Requirements-Checker.ps1 -Proxy "http://proxy:8080"
 ```
+
+![image](https://user-images.githubusercontent.com/5992827/224649005-dc753a44-2f0e-4988-b579-5ad7d2d2a27b.png)
